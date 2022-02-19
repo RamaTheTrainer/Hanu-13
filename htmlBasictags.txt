@@ -1,0 +1,27 @@
+html
+head
+body
+title
+h1
+p
+b
+i 
+u 
+img 
+sub
+sup
+table
+	thead
+		th
+	tbody
+		tr
+			td
+
+ul
+ol
+	li
+dl
+	dt
+		dd
+video
+audio
