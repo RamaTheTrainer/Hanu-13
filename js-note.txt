@@ -1,0 +1,119 @@
+output display 
+------------------------
+	innerHTML
+	alert()
+	document.write()
+	console.log() 
+	assign variable value to value property of input 
+
+function 
+	block of staments , which will exeute when we call it 
+
+	function functionName(params){
+		stmts
+		}
+
+
+Event - Occurance of an action 
+	for the event, if we  attach the method to execute , then when ever that event occured 
+		our function will get executed 
+
+
+click		- onclick
+doubleClick     - ondbclick
+hover 		- onhover
+focusLeave 	- onfocusout
+
+
+
+<button onclick = "functionName(prams)">Login</button>
+
+
++ is used as concatination 
+	rama+ sree    -- >  ramasree
+
+* for the in put controls by default the value will be treated as string 
+
+"30"
++
+"40"
+
+= "3040"
+
+
+parseInt()  - used to convert text to numerical format 
+
+
+----
+Task 
+-------
+Check Some in built functions 
+		string
+		numerical 
+		date 
+		
+
+Array 
+-------------------------- 
+A collection of same datatype elements 
+
+arrayName = [item1, item2, item3,...]
+
+each item can be accessed by its index 
+index will alsways starts from 0 
+
+groups = ['mpc','bipc','cec','hec']
+
+document.write(groups[2])
+
+
+
+toString()
+join()
+pop()
+push()
+shift()
+unshift()
+slice()
+splice()
+sort()
+
+
+
+Validations 
+-------------------------
+html5 comes with may default validations
+
+required
+min
+max
+minlingth
+maxliength 
+email
+date 
+
+
+Custom validations using javascript 
+---------------------------------------------
+<form onsubmit="submitForm()">
+<input type="text" id="txtLastName" class="form-control" />
+
+<head>
+<script>
+        function submitForm() {
+            var lname = document.getElementById('txtLastName').value;
+            if (lname.length < 3) {
+                alert('Please enter min 3 chars ')
+                event.preventDefault();
+            }
+            else {
+                
+            }
+        }
+    </script>
+<head>
+
+
+
+
+
