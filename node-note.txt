@@ -1,0 +1,105 @@
+Module 
+	-is collection of functions 
+	- export using module 
+	- import using required 
+
+
+
+Exception Handling 
+-------------------------
+
+Syntax Errors
+Logical Errors
+Runtime Errors
+
+
+Exception 	- a runtime error  
+
+
+in build Error class 
+
+using try , throw , catch stmts 
+
+
+try - this block conatins all the instruction which may generate a runtime errors
+
+catch - will contains the instructions to be performed after the runtime error
+	will executes only when the runtime error occured 
+
+throw 	- used to throw the error and control from try block to the catch block 
+
+
+
+try{
+-----------
+-----------
+-----------
+throw new Error(''err Messsage)
+}
+catch(err){
+-----------
+}
+
+
+
+
+
+Application initialization 
+-----------------------------------
+npm init     --> enter 
+will creates a package .json file 
+which contains info like  projectName, Description , version , author , licence ...etc 
+
+
+to install additional packages 
+npm install packageName 
+	ex : npm install bootstrap
+
+in the package .json file we can see dependecies property which gives the list of 
+packages used in our app 
+
+	npm install  - install all dependecies from package.json 
+
+
+
+Global variables at Node 
+	__filename
+	__dirname
+
+
+
+
+
+in built nodejs modules 
+	path 
+	fs 
+
+
+save a signle line of text into file 
+
+
+
+Events 
+---------------------
+Event - an action , occurance of an action , 
+
+Event Listner / Event Handler  - a function / method with some body and which is attached to the event 
+
+at nodeJS , we can use events module to work with events concept 
+need to import events module 
+
+	var ev = require('events');
+
+we can use eventEmitter obj for attaching an listner to an event and also emit the event 
+		on()  - will attach listner to the event 
+		emit()- WIll fire an event , emits an event 
+
+ 
+
+
+
+
+
+
+
+
