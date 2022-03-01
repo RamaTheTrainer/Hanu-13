@@ -1,0 +1,316 @@
+
+
+	9090
+
+	http://localhost:9090
+
+
+GET 		- Used to retreive data as response 
+
+PUT		- Update the data object 	
+
+POST 		- Save or insert the data 
+
+DELETE		- Delete the Object
+
+PATCH		- update only single column 
+
+
+
+GET 	- http://localhost:9090/movies			- Return all the movies 
+GET	- http://localhost:9090/movies/movieId		- Return movie based on movieId
+
+DELETE	- http://localhost:9090/movies/movieId		- Delete movie based o movieId
+
+POST	- http://localhost:9090/movies			- Save the movie details 
+	    req body we should pass the movie data
+
+
+
+
+Nodejs Server 		with Database as MongoDB	- mongodb* , mongoose	
+
+* default http method from browser is GET 
+For PUT , POST , DELETE,... 	we need to postman / rest client/ thunder client(vscode extension) 
+
+
+
+moviedb - movies
+-------------------
+mid
+mname
+mposter
+mdesc
+mawards
+mdirector
+mhero
+
+-----------------------------------------------------
+STEPS 
+-----------------------------------------------------
+npm init
+
+npm i express
+
+write the logic for basic server 
+
+add  app.js
+
+add the following base code 
+
+var express = require('express');
+var app = express();
+
+app.set('port', process.env.PORT || 9090);
+
+app.get('/',(req,res)=>{
+    res.send('Welcome to node Mongo API ....')
+})
+
+
+app.listen(app.get('port'),(err)=>{
+    if(err){
+        console.log("Error in starting server ");
+    } else {
+        console.log("Server is running at  : " + app.get('port'));
+    }
+})
+
+
+*********
+npm i mongodb
+
+now use mongodb url and mongoclient to connect to the server 
+mongoclient is used to connect to the mongoserver instance 
+
+Now creat and implement routes for 
+
+get all movies 
+get movie by id 
+delete movie by id 
+
+
+
+var express = require('express');
+var mongoClient = require('mongodb').MongoClient
+var dbServerUrl = "mongodb://localhost:27017"
+var app = express();
+
+app.set('port', process.env.PORT || 9090);
+
+app.get('/', (req, res) => {
+    res.send('Welcome to node Mongo API ....')
+})
+
+app.get('/movies', (req, res) => {
+    mongoClient.connect(dbServerUrl, async (err, dbserver) => {
+        if (err) {
+            console.log('Error..! Unable to connect to mongoDB Server')
+        } else {
+            console.log("Connected succesfully to DB Server ..");
+            dbo = dbserver.db("moviedb");
+            data = await dbo.collection('movies').find().toArray()
+            res.send(data);
+        }
+    })
+})
+
+app.get('/movies/:id', (req, res) => {
+    var movieId = req.params.id;
+    var query = { "mid": movieId }
+    mongoClient.connect(dbServerUrl, async (err, dbserver) => {
+        if (err) {
+            console.log('Error..! Unable to connect to mongoDB Server')
+        } else {
+            var dbo = dbserver.db('moviedb');
+            var data = await dbo.collection('movies').find(query).toArray();
+            res.send(data);
+        }
+    })
+})
+
+app.delete('/movies/:id', (req, res) => {
+    var movieId = req.params.id;
+    var query = { "mid": movieId };
+    mongoClient.connect(dbServerUrl, async (err, dbserver) => {
+        if (err) {
+            console.log('Error..! Unable to connect to mongoDB Server')
+        } else {
+            var dbo = dbserver.db('moviedb');
+            await dbo.collection('movies').deleteOne(query, (err) => {
+                if (err) {
+                    res.send({ "message": "Error in Deleting the record.." })
+                } else {
+                    res.send({ "message": "Deleted successfully" });
+                }
+            })
+        }
+    })
+})
+
+app.listen(app.get('port'), (err) => {
+    if (err) {
+        console.log("Error in starting server ");
+    } else {
+        console.log("Server is running at  : " + app.get('port'));
+    }
+})
+
+
+***************
+Save a movie into Database 
+
+need to pass the movie object from the req body 
+
+to read the request body , we use body-parser middle ware 
+
+npm i body-parser 
+
+
+at app.js file 
+--------------
+
+var express = require('express');
+var bodyParser = require('body-parser')
+var movieRoutes  = require('./movieRoutes')
+var app = express();
+
+app.set('port', process.env.PORT || 9090);
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+app.use('/api', movieRoutes);
+
+app.get('/', (req, res) => {
+    res.send('Welcome to node Mongo API ....')
+})
+
+app.listen(app.get('port'), (err) => {
+    if (err) {
+        console.log("Error in starting server ");
+    } else {
+        console.log("Server is running at  : " + app.get('port'));
+    }
+})
+
+
+at movieRoutes.js
+------------------------
+
+var mongoClient = require('mongodb').MongoClient
+var dbServerUrl = "mongodb://localhost:27017"
+var express = require('express'); 
+movieRouter = express.Router();
+
+// retunrs all the movies list 
+movieRouter.get('/movies', (req, res) => {
+    mongoClient.connect(dbServerUrl, async (err, dbserver) => {
+        if (err) {
+            console.log('Error..! Unable to connect to mongoDB Server')
+        } else {
+            console.log("Connected succesfully to DB Server ..");
+            dbo = dbserver.db("moviedb");
+            data = await dbo.collection('movies').find().toArray()
+            res.send(data);
+        }
+    })
+})
+
+// retunrs =movie details by movie id 
+movieRouter.get('/movies/:id', (req, res) => {
+    var movieId = req.params.id;
+    var query = { "mid": movieId }
+    mongoClient.connect(dbServerUrl, async (err, dbserver) => {
+        if (err) {
+            console.log('Error..! Unable to connect to mongoDB Server')
+        } else {
+            var dbo = dbserver.db('moviedb');
+            var data = await dbo.collection('movies').find(query).toArray();
+            res.send(data);
+        }
+    })
+})
+
+// Deletes a movie by movie Id
+movieRouter.delete('/movies/:id', (req, res) => {
+    var movieId = req.params.id;
+    var query = { "mid": movieId };
+    mongoClient.connect(dbServerUrl, async (err, dbserver) => {
+        if (err) {
+            console.log('Error..! Unable to connect to mongoDB Server')
+        } else {
+            var dbo = dbserver.db('moviedb');
+            await dbo.collection('movies').deleteOne(query, (err) => {
+                if (err) {
+                    res.send({ "message": "Error in Deleting the record.." })
+                } else {
+                    res.send({ "message": "Deleted successfully" });
+                }
+            })
+        }
+    })
+})
+
+
+// Saves a new movie to DB
+movieRouter.post('/movies', (req, res) => {
+    var movieObject = {
+        "mid": req.body.mid,
+        "mname": req.body.mname,
+        "mposter": req.body.mposter,
+        "mdesc": req.body.mdesc,
+        "mawards": req.body.mawards,
+        "mdirector": req.body.mdirector,
+        "mhero": req.body.mhero
+    }
+    mongoClient.connect(dbServerUrl, async (err, dbserver) => {
+        if (err) {
+            console.log('Error..! Unable to connect to mongoDB Server')
+        } else {
+            var dbo = dbserver.db('moviedb');
+            await dbo.collection('movies').insertOne(movieObject, (err) => {
+                if (err) {
+                    res.send({ "message": "Error in Saving the record.." })
+                } else {
+                    res.send({ "message": "Saved successfully" });
+                }
+            })
+        }
+    })
+})
+
+// update a movie by movieId
+movieRouter.put("/movies", (req, res) => {
+    var movieUpObject = {
+        "mid": req.body.mid,
+        "mname": req.body.mname,
+        "mposter": req.body.mposter,
+        "mdesc": req.body.mdesc,
+        "mawards": req.body.mawards,
+        "mdirector": req.body.mdirector,
+        "mhero": req.body.mhero
+    }
+    var query = {"mid": req.body.mid};
+    var newObject = { $set: movieUpObject }
+    mongoClient.connect(dbServerUrl, async (err, dbserver) => {
+        if (err) {
+            console.log('Error..! Unable to connect to mongoDB Server')
+        } else {
+            var dbo = dbserver.db('moviedb');
+            await dbo.collection('movies').updateOne(query, newObject, (err) => {
+                if (err) {
+                    res.send({ "message": "Error in Updating .." })
+                } else {
+                    res.send({ "message": "Successfully updated.." })
+                }
+            })
+        }
+    })
+})
+
+module.exports = movieRouter
+
+
+			
+
+
