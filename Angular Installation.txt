@@ -1,0 +1,43 @@
+To install angular 
+---------------------------
+1) NodejS must be installed 
+
+2) TypeScript must be installed 
+	npm i -g typescript 
+
+3) Install angular cli lobally 
+	npm i -g @angular/cli
+
+open cmd prompt 
+		ng -version 
+
+I can create an angular application 
+
+	ng new applicationName 
+
+
+
+
+@NgModule({
+	imports: [all the modules we are importing]
+	declarations: [Components , Pipes, Directives]
+	exports:[if any components/directives / pipes we are exporting to other modules]
+	providers:[ services we are using]
+	bootstrap:[AppComponent]
+})
+export class AppModule{
+}
+
+
+Request  -->> main.ts  -->bootsrapped with AppModule  --> AppModule --->> bootstraped AppComponent 
+	thats y appcomponent.html will be dispalyed first in the browser 
+
+
+@Component({
+	selector:  html tag represents our component
+	templateUrl: file url contains html design
+	stylesUrl: file url conatins styles 
+})
+class AppComponent{
+}
+
